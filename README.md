@@ -1,11 +1,13 @@
 # YouTube Playback Speed Control - Firefox Add-on
 
+> This is an Updated Version of the [youtube-speed-controls](https://github.com/Kissaki/youtube-speed-controls) Firefox Add-on by [Jan Klass](https://github.com/Kissaki).
+
 Add playback speed indicator and controls to the YouTube video player bottom left.
 
 ![screenshot of the playback speed display and controls in the YouTube player](screenshot.png)
 
 * Normal Video Player
-* Shorts *(functional, but not stylized to Shorts player yet)*
+* not optimized for Shorts
 
 ## Developing
 
@@ -17,4 +19,4 @@ in Firefox:
 
 ## Publish
 
-* run `pack-bat`
+* run `./pack.ps1`
