@@ -152,8 +152,35 @@ class Instance {
     container.className = 'pbspeed-container'
     container.style = 'margin:0 14px; display:flex; align-items: center; gap:12px;'
 
-    let displayHTML = `<div class="rdisplay" style="grid-row: 1; grid-column: 1; font-size:22px; user-select: none;">⏱ <span class="pbspeed-value"></span></div>`
-    let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="2" step="0.05" style="grid-row: 1; grid-column: 3; width:7em; height:0.72em; -webkit-appearance:none; outline:none; opacity:0.70; background:#111111; box-shadow: inset 0 0 5px rgba(0, 0, 0, 1); border-radius: 4px;"/>`
+    let displayHTML = `<div class="rdisplay" style="grid-row: 1; grid-column: 1; font-size:120%; user-select: none;">⏱ <span class="pbspeed-value"></span></div>`
+    if (!document.querySelector('#pbspeed-slider-style')) {
+        const style = document.createElement('style');
+        style.id = 'pbspeed-slider-style';
+        style.textContent = `
+            .pbspeed-slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background: #6f6f6fff;
+                cursor: pointer;
+                border: none;
+                box-shadow: 0 0 2px rgba(0,0,0,0.5);
+            }
+            .pbspeed-slider::-moz-range-thumb {
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background: rgba(241, 241, 241, 0.8);
+                cursor: pointer;
+                border: 2px solid white;
+                box-shadow: 0 0 2px rgba(0,0,0,0.5);
+                border: none;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.05" style="grid-row: 1; grid-column: 3; width:7em; height:0.5em; -webkit-appearance:none; outline:none; opacity:0.70; background: rgba(70, 70, 70, 1); border-radius: 4px;"/>`
     // Control layout:
     // | Display | 0.25 0.50 0.75 1.00
     // | Current | 1.25 1.50 1.75 2.00
