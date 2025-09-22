@@ -1,7 +1,7 @@
 {
-  "manifest_version": 2,
-  "name": "YouTube Playback Speed Control",
-  "description": "Add playback speed indicator and controls to the YouTube video player controls.",
+  "manifest_version": 3,
+  "name": "YouTube Speed Control Slider",
+  "description": "Add playback speed Slider and controls to the YouTube video player controls.",
   "version": "1.6.0",
   "content_scripts": [
     {
@@ -12,8 +12,7 @@
   ],
   "options_ui": {
     "page": "pages/options.html",
-    "browser_style": true,
-    "chrome_style": true
+    "open_in_tab": false
   },
   "permissions": [
     "storage"
