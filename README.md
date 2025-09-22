@@ -1,4 +1,4 @@
-# YouTube Playback Speed Control - Firefox Add-on
+# YouTube Speed Slider - Add-on
 
 > This is an Updated Version of the [youtube-speed-controls](https://github.com/Kissaki/youtube-speed-controls) Firefox Add-on by [Jan Klass](https://github.com/Kissaki).
 
