@@ -13,10 +13,18 @@ Add playback speed indicator and controls to the YouTube video player bottom lef
 
 in Firefox:
 
-* go to <about:debugging#/runtime/this-firefox>
+* go to `about:debugging#/runtime/this-firefox`
 * press `Load Temporary Add-on`
-* then select the manifest.json file in this directory
+* then select the `manifest.json` file in this directory
 
 ## Publish
 
 * run `./pack.ps1`
+* go to `about:debugging#/runtime/this-firefox`
+* select the zip
+
+## TODO
+
+* optimize for shorts
+* add extention options for changing the max speed
+* make the slider only apper when hovering
