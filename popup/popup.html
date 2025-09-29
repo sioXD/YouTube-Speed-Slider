@@ -7,11 +7,13 @@
       width: 320px;
       padding: 16px;
       font-family: Arial, sans-serif;
+      background-color: #222222;
+      color: #ffffff;
     }
     .control-group {
       margin-bottom: 16px;
       padding-bottom: 12px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid rgb(238, 238, 238, 0.8);
     }
     label {
       display: flex;
@@ -19,8 +21,10 @@
       cursor: pointer;
       margin-bottom: 8px;
     }
-    input[type="checkbox"] {
-      margin-right: 8px;
+    input[type="number"] {
+      background-color: #303030;
+      color: #ffffff;
+      outline-style: none;
     }
     .title {
       font-weight: bold;
@@ -41,9 +45,11 @@
     .speed-input-group {
       display: flex;
       align-items: center;
-      border: 1px solid #ccc;
+      border: 1px solid #5f5f5f;
       border-radius: 4px;
       overflow: hidden;
+      background-color: #303030;
+      color: #ffffff;
     }
     .speed-input-group input {
       width: 60px;
@@ -61,16 +67,20 @@
       width: 28px;
       height: 28px;
       border: none;
-      background-color: #f0f0f0;
+      background-color: #303030;
       cursor: pointer;
       font-size: 16px;
       font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all .3s ease;
+      color: #ffffff;
     }
     .speed-btn:hover {
       background-color: #e0e0e0;
+      transition: all .3s ease;
+      color: #222222;
     }
     .speed-btn:active {
       background-color: #d0d0d0;

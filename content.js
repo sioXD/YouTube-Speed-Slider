@@ -219,13 +219,13 @@ class Instance {
   }
   async _updateSliderRange() {
     let values = await chrome.storage.local.get({ 
-        'min-speed': 0.25, 
+        'min-speed': 0, 
         'max-speed': 5.00 
     })
     
     this._slider.min = values['min-speed']
     this._slider.max = values['max-speed']
-    this._slider.step = 0.25
+    this._slider.step = 0.05
   }
   _updateRateDisplay() {
     let value = this._video.playbackRate
@@ -271,8 +271,16 @@ let init = async () => {
   new NormalPlayerObserver(onNewPlayer)
   new ShortsPlayerObserver(onNewPlayer)
 
-  // backup
+  // backup 1
+  await delay(5000);
+  new NormalPlayerObserver(onNewPlayer)
+  
+  // backup 2
   await delay(10000);
+  new NormalPlayerObserver(onNewPlayer)  
+  
+  // backup 3 (bro wtf, what machine do you have 🤯)
+  await delay(30000);
   new NormalPlayerObserver(onNewPlayer)
 }
 init()

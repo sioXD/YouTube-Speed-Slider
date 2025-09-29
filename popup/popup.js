@@ -23,7 +23,7 @@ minSpeedPlus.addEventListener('click', () => {
 
 minSpeedMinus.addEventListener('click', () => {
     let value = parseFloat(minSpeed.value) - 0.25
-    if (value < parseFloat(maxSpeed.value)) {
+    if (value < parseFloat(maxSpeed.value) && value > 0) {
         minSpeed.value = value.toFixed(2)
         chrome.storage.local.set({ 'min-speed': value })
     }
@@ -31,7 +31,7 @@ minSpeedMinus.addEventListener('click', () => {
 
 minSpeed.addEventListener('change', e => {
     let value = parseFloat(e.target.value)
-    if (value < parseFloat(maxSpeed.value)) {
+    if (value < parseFloat(maxSpeed.value) && value > 0) {
         chrome.storage.local.set({ 'min-speed': value })
     }
 })
