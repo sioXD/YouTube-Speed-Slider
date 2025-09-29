@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "YouTube Speed Slider",
   "description": "Add playback speed Slider and controls to the YouTube video player controls.",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "action": {
     "default_popup": "popup/popup.html",
     "default_title": "YouTube Speed Slider"

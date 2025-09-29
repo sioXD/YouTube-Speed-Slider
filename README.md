@@ -20,8 +20,14 @@ in Firefox:
 ## Publish
 
 * run `./pack.ps1`
+
+### local
+
 * go to `about:debugging#/runtime/this-firefox`
 * select the zip
+
+### on Marketplace
+
 
 ## TODO
 
