@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 320px;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+    }
+    .control-group {
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eee;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    .title {
+      font-weight: bold;
+      margin-bottom: 16px;
+      text-align: center;
+      font-size: 16px;
+    }
+    .speed-control {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .speed-control label {
+      width: 100px;
+      margin-bottom: 0;
+    }
+    .speed-input-group {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .speed-input-group input {
+      width: 60px;
+      padding: 4px;
+      border: none;
+      text-align: center;
+      -moz-appearance: textfield;
+    }
+    .speed-input-group input::-webkit-outer-spin-button,
+    .speed-input-group input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .speed-btn {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .speed-btn:hover {
+      background-color: #e0e0e0;
+    }
+    .speed-btn:active {
+      background-color: #d0d0d0;
+    }
+    .note {
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .reset-btn {
+      width: 100%;
+      padding: 8px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .reset-btn:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+
+
+  <div class="control-group">
+    <div class="speed-control">
+      <label for="minSpeed">Min Speed:</label>
+      <div class="speed-input-group">
+        <button type="button" class="speed-btn" id="minSpeedMinus">-</button>
+        <input type="number" id="minSpeed" step="0.25" />
+        <button type="button" class="speed-btn" id="minSpeedPlus">+</button>
+      </div>
+    </div>
+    <div class="speed-control">
+      <label for="maxSpeed">Max Speed:</label>
+      <div class="speed-input-group">
+        <button type="button" class="speed-btn" id="maxSpeedMinus">-</button>
+        <input type="number" id="maxSpeed" step="0.25" />
+        <button type="button" class="speed-btn" id="maxSpeedPlus">+</button>
+      </div>
+    </div>
+    <div class="note">Standard: Min 0, Max 5.00</div>
+  </div>
+
+  <button class="reset-btn" id="resetBtn">Reset to Default</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -180,7 +180,7 @@ class Instance {
         `;
         document.head.appendChild(style);
     }
-    let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.05" style="grid-row: 1; grid-column: 3; width:7em; height:0.5em; -webkit-appearance:none; outline:none; opacity:0.70; background: rgba(70, 70, 70, 1); border-radius: 4px;"/>`
+    let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.05" style="grid-row: 1; grid-column: 3; width:7em; height:0.5em; -webkit-appearance:none; outline:none; opacity:0.70; background: rgba(70, 70, 70, 1); border-radius: 4px; cursor: pointer;"/>`
     // Control layout:
     // | Display | 0.25 0.50 0.75 1.00
     // | Current | 1.25 1.50 1.75 2.00
@@ -207,10 +207,25 @@ class Instance {
     this._display.addEventListener('click', this._onRdisplayClick.bind(this))
     this._display.style.cursor = 'pointer'
 
-    // (How) Can we listen to option changes from a content script?
-    // browser.storage.onChanged.addEventListener(e => console.log(e))
-    // browser.storage.local.addEventListener('changed', e => console.log(e))
-    // browser.storage.local.onChanged.addEventListener(e => console.log(e))
+    // Slider Range aktualisieren
+    this._updateSliderRange()
+    
+    // Auf Änderungen der Min/Max Werte reagieren
+    chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local' && (changes['min-speed'] || changes['max-speed'])) {
+            this._updateSliderRange()
+        }
+    })
+  }
+  async _updateSliderRange() {
+    let values = await chrome.storage.local.get({ 
+        'min-speed': 0.25, 
+        'max-speed': 5.00 
+    })
+    
+    this._slider.min = values['min-speed']
+    this._slider.max = values['max-speed']
+    this._slider.step = 0.25
   }
   _updateRateDisplay() {
     let value = this._video.playbackRate
@@ -243,6 +258,8 @@ class Instance {
   }
 }
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
 let init = async () => {
   /**
    * @type {(videoElement: HTMLVideoElement, controlsContainer: Element)}
@@ -253,5 +270,9 @@ let init = async () => {
   }
   new NormalPlayerObserver(onNewPlayer)
   new ShortsPlayerObserver(onNewPlayer)
+
+  // backup
+  await delay(10000);
+  new NormalPlayerObserver(onNewPlayer)
 }
 init()
