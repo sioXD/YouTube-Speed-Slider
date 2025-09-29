@@ -19,15 +19,18 @@ in Firefox:
 
 ## Publish
 
-* run `./pack.ps1`
-
 ### local
 
+* run `./pack.ps1`
 * go to `about:debugging#/runtime/this-firefox`
 * select the zip
 
 ### on Marketplace
 
+* run `./pack.ps1`
+* go to: <https://addons.mozilla.org/de/developers/addons>
+* Add new Addon / New Version
+* select the zip
 
 ## TODO
 
