@@ -15,7 +15,7 @@ const DEFAULT_VALUES = {
     'min-speed': 0,
     'max-speed': 5.00,
     'wheel-step': 0.05,
-    'save-speed': 'always'
+    'save-speed': 'never'
 }
 
 // Min Speed +/- Buttons
@@ -101,6 +101,7 @@ resetBtn.addEventListener('click', async () => {
     if (confirm('Reset all settings to default values?')) {
         // Setze alle Werte auf Standard
         await chrome.storage.local.set(DEFAULT_VALUES)
+        await chrome.storage.local.remove('last-speed') // for changing videos
         
         // Aktualisiere die UI
         await updateUI()
@@ -116,7 +117,6 @@ resetBtn.addEventListener('click', async () => {
 
 async function updateUI() {
     let values = await chrome.storage.local.get(DEFAULT_VALUES)
-    console.debug("POPUP-VALUES: ", values)
     
     minSpeed.value = values['min-speed'].toFixed(2)
     maxSpeed.value = values['max-speed'].toFixed(2)
