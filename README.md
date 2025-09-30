@@ -4,10 +4,9 @@
 
 Add playback speed indicator and controls to the YouTube video player bottom left.
 
-![screenshot of the playback speed display and controls in the YouTube player](screenshot1.png)
+![screenshot of the playback speed display and controls in the YouTube player](img/screenshot1.png)
 
-
-![screenshot of the popup menu](screenshot2.png)
+![screenshot of the popup menu](img/screenshot2.png)
 
 ## Developing
 
