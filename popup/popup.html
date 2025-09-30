@@ -126,7 +126,15 @@
         <button type="button" class="speed-btn" id="maxSpeedPlus">+</button>
       </div>
     </div>
-    <div class="note">Standard: Min 0, Max 5.00</div>
+    <div class="speed-control">
+      <label for="wheelStep">Wheel Step:</label>
+      <div class="speed-input-group">
+        <button type="button" class="speed-btn" id="wheelStepMinus">-</button>
+        <input type="number" id="wheelStep" step="0.05" />
+        <button type="button" class="speed-btn" id="wheelStepPlus">+</button>
+      </div>
+    </div>
+    <div class="note">Standard: Min 0, Max 5.00, Wheel Step 0.05</div>
   </div>
 
   <button class="reset-btn" id="resetBtn">Reset to Default</button>

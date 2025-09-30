@@ -4,12 +4,15 @@ let minSpeedPlus = document.getElementById('minSpeedPlus')
 let minSpeedMinus = document.getElementById('minSpeedMinus')
 let maxSpeedPlus = document.getElementById('maxSpeedPlus')
 let maxSpeedMinus = document.getElementById('maxSpeedMinus')
+let wheelStepPlus = document.getElementById('wheelStepPlus')
+let wheelStepMinus = document.getElementById('wheelStepMinus')
 let resetBtn = document.getElementById('resetBtn')
 
 // Standardwerte
 const DEFAULT_VALUES = {
     'min-speed': 0,
-    'max-speed': 5.00
+    'max-speed': 5.00,
+    'wheel-step': 0.05
 }
 
 // Min Speed +/- Buttons
@@ -60,6 +63,30 @@ maxSpeed.addEventListener('change', e => {
     }
 })
 
+// Wheel Step +/- Buttons
+wheelStepPlus.addEventListener('click', () => {
+    let value = parseFloat(wheelStep.value) + 0.05
+    if (value > 0) {
+        wheelStep.value = value.toFixed(2)
+        chrome.storage.local.set({ 'wheel-step': value })
+    }
+})
+
+wheelStepMinus.addEventListener('click', () => {
+    let value = parseFloat(wheelStep.value) - 0.05
+    if (value > 0) {
+        wheelStep.value = value.toFixed(2)
+        chrome.storage.local.set({ 'wheel-step': value })
+    }
+})
+
+wheelStep.addEventListener('change', e => {
+    let value = parseFloat(e.target.value)
+    if (value > 0) {
+        chrome.storage.local.set({ 'wheel-step': value })
+    }
+})
+
 resetBtn.addEventListener('click', async () => {
     // Bestätigungsdialog
     if (confirm('Reset all settings to default values?')) {
@@ -83,6 +110,7 @@ async function updateUI() {
     
     minSpeed.value = values['min-speed'].toFixed(2)
     maxSpeed.value = values['max-speed'].toFixed(2)
+    wheelStep.value = values['wheel-step'].toFixed(2)
 }
 
 // Initialisierung

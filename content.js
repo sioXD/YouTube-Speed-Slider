@@ -204,6 +204,9 @@ class Instance {
   
     this._slider.addEventListener('input', this._onSliderInput.bind(this))
     
+    // Mouse wheel event for slider
+    this._container.addEventListener('wheel', this._onSliderWheel.bind(this))
+    
     this._display.addEventListener('click', this._onRdisplayClick.bind(this))
     this._display.style.cursor = 'pointer'
 
@@ -237,6 +240,26 @@ class Instance {
   }
   _onSliderInput(e) {
     this._video.playbackRate = e.target.value
+  }
+  _onSliderWheel(e) {
+    e.preventDefault()
+    
+    // Gespeicherte Schrittweite abrufen
+    chrome.storage.local.get({ 'wheel-step': 0.05 }).then((values) => {
+        const step = values['wheel-step']
+        const delta = e.deltaY > 0 ? -step : step
+        
+        // Calculate new rate
+        let newRate = parseFloat(this._slider.value) + delta
+        
+        // Clamp to min/max values
+        newRate = Math.max(parseFloat(this._slider.min), Math.min(parseFloat(this._slider.max), newRate))
+        
+        // Update video and slider
+        this._video.playbackRate = newRate
+        this._slider.value = newRate
+        this._updateRateDisplay()
+    })
   }
   _onRdisplayClick(e) {
     this._video.playbackRate = 1.0
