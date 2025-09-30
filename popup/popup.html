@@ -10,6 +10,24 @@
       background-color: #222222;
       color: #ffffff;
     }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgb(238, 238, 238, 0.3);
+    }
+    .header-icon {
+      width: 24px;
+      height: 24px;
+    }
+    .header-title {
+      font-weight: bold;
+      font-size: 18px;
+      color: #ffffff;
+    }
     .control-group {
       margin-bottom: 16px;
       padding-bottom: 12px;
@@ -125,6 +143,12 @@
   </style>
 </head>
 <body>
+
+  <!-- ⏱️ -->
+  <div class="header">
+    <img src="../icons/icon.png" alt="⏱️" class="header-icon">
+    <div class="header-title">YouTube Speed Slider</div>
+  </div>
 
   <div class="control-group">
     <div class="speed-control">
