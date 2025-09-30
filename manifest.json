@@ -5,7 +5,13 @@
   "version": "1.8.0",
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "YouTube Speed Slider"
+    "default_title": "YouTube Speed Slider",
+    "default_icon": {
+      "48": "img/icon.png"
+    }
+  },
+  "icons": {
+    "48": "img/icon.png"
   },
   "content_scripts": [
     {
