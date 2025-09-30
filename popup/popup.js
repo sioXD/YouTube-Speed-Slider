@@ -1,5 +1,7 @@
 let minSpeed = document.getElementById('minSpeed')
 let maxSpeed = document.getElementById('maxSpeed')
+let wheelStep = document.getElementById('wheelStep')
+let saveSpeed = document.getElementById('saveSpeed')
 let minSpeedPlus = document.getElementById('minSpeedPlus')
 let minSpeedMinus = document.getElementById('minSpeedMinus')
 let maxSpeedPlus = document.getElementById('maxSpeedPlus')
@@ -12,7 +14,8 @@ let resetBtn = document.getElementById('resetBtn')
 const DEFAULT_VALUES = {
     'min-speed': 0,
     'max-speed': 5.00,
-    'wheel-step': 0.05
+    'wheel-step': 0.05,
+    'save-speed': 'always'
 }
 
 // Min Speed +/- Buttons
@@ -26,7 +29,7 @@ minSpeedPlus.addEventListener('click', () => {
 
 minSpeedMinus.addEventListener('click', () => {
     let value = parseFloat(minSpeed.value) - 0.25
-    if (value < parseFloat(maxSpeed.value) && value > 0) {
+    if (value < parseFloat(maxSpeed.value) && value >= 0) {
         minSpeed.value = value.toFixed(2)
         chrome.storage.local.set({ 'min-speed': value })
     }
@@ -34,7 +37,7 @@ minSpeedMinus.addEventListener('click', () => {
 
 minSpeed.addEventListener('change', e => {
     let value = parseFloat(e.target.value)
-    if (value < parseFloat(maxSpeed.value) && value > 0) {
+    if (value < parseFloat(maxSpeed.value) && value >= 0) {
         chrome.storage.local.set({ 'min-speed': value })
     }
 })
@@ -87,6 +90,12 @@ wheelStep.addEventListener('change', e => {
     }
 })
 
+// Save Speed Option
+saveSpeed.addEventListener('change', e => {
+    chrome.storage.local.set({ 'save-speed': e.target.value })
+    chrome.storage.local.remove('last-speed')
+})
+
 resetBtn.addEventListener('click', async () => {
     // Bestätigungsdialog
     if (confirm('Reset all settings to default values?')) {
@@ -107,10 +116,12 @@ resetBtn.addEventListener('click', async () => {
 
 async function updateUI() {
     let values = await chrome.storage.local.get(DEFAULT_VALUES)
+    console.debug("POPUP-VALUES: ", values)
     
     minSpeed.value = values['min-speed'].toFixed(2)
     maxSpeed.value = values['max-speed'].toFixed(2)
     wheelStep.value = values['wheel-step'].toFixed(2)
+    saveSpeed.value = values['save-speed']
 }
 
 // Initialisierung

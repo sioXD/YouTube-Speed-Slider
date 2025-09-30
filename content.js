@@ -139,10 +139,35 @@ class Instance {
     this._removeExisting()
     this._create()
     this._bind()
+    this._loadSavedSpeed() // Geladene Geschwindigkeit anwenden
     this._updateRateDisplay()
     this._updateControlVisibility()
     this._insert()
   }
+
+  // Neue Methode zum Laden der gespeicherten Geschwindigkeit
+  async _loadSavedSpeed() {
+    const values = await chrome.storage.local.get({ 'save-speed': 'always', 'last-speed': 1.0 })
+    console.debug("LOADED: ", values)
+    
+    if (values['save-speed'] === 'always') {
+      // Gespeicherte Geschwindigkeit anwenden, falls vorhanden
+      this._video.playbackRate = values['last-speed'] //! problem ist heir
+    } else {
+      // Auf Standard zurücksetzen
+      this._video.playbackRate = 1.0
+    }
+  }
+
+  // Neue Methode zum Speichern der Geschwindigkeit
+  async _saveCurrentSpeed() {
+    const values = await chrome.storage.local.get({ 'save-speed': 'always' })
+    
+    if (values['save-speed'] === 'always') {
+      chrome.storage.local.set({ 'last-speed': this._video.playbackRate })
+    }
+  }
+
   _removeExisting() {
     let existing = this._controlsContainer.querySelector('.pbspeed-container')
     if (existing) existing.remove()
@@ -236,10 +261,12 @@ class Instance {
     this._slider.value = value
   }
   _onPresetClick(e) {
-    this._video.playbackRate = e.target.innerText
+    this._video.playbackRate = parseFloat(e.target.innerText)
+    this._saveCurrentSpeed() // Speichern bei Preset-Klick
   }
   _onSliderInput(e) {
-    this._video.playbackRate = e.target.value
+    this._video.playbackRate = parseFloat(e.target.value)
+    this._saveCurrentSpeed() // Speichern bei Slider-Input
   }
   _onSliderWheel(e) {
     e.preventDefault()
@@ -259,10 +286,12 @@ class Instance {
         this._video.playbackRate = newRate
         this._slider.value = newRate
         this._updateRateDisplay()
+        this._saveCurrentSpeed() // Speichern bei Wheel-Input
     })
   }
   _onRdisplayClick(e) {
     this._video.playbackRate = 1.0
+    this._saveCurrentSpeed() // Speichern bei Reset-Klick
   }
   async _updateControlVisibility() {
     let values = await chrome.storage.local.get({ 'show-slider': true, 'show-presets': false })

@@ -104,10 +104,27 @@
     .reset-btn:hover {
       background-color: #d32f2f;
     }
+    .save-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+    .save-option label {
+      margin-bottom: 0;
+      width: auto;
+    }
+    select {
+      background-color: #303030;
+      color: #ffffff;
+      border: 1px solid #5f5f5f;
+      border-radius: 4px;
+      padding: 4px 8px;
+      outline: none;
+    }
   </style>
 </head>
 <body>
-
 
   <div class="control-group">
     <div class="speed-control">
@@ -135,6 +152,17 @@
       </div>
     </div>
     <div class="note">Standard: Min 0, Max 5.00, Wheel Step 0.05</div>
+  </div>
+
+  <div class="control-group">
+    <div class="save-option">
+      <label for="saveSpeed">Save Speed:</label>
+      <select id="saveSpeed">
+        <option value="always">Always</option>
+        <option value="never">Never</option>
+      </select>
+    </div>
+    <div class="note">"Always": Remembers speed between videos<br>"Never": Reset to 1.0 for each video</div>
   </div>
 
   <button class="reset-btn" id="resetBtn">Reset to Default</button>
