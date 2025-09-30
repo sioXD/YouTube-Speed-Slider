@@ -4,10 +4,10 @@
 
 Add playback speed indicator and controls to the YouTube video player bottom left.
 
-![screenshot of the playback speed display and controls in the YouTube player](screenshot.png)
+![screenshot of the playback speed display and controls in the YouTube player](screenshot1.png)
 
-* Normal Video Player
-* not optimized for Shorts
+
+![screenshot of the popup menu](screenshot2.png)
 
 ## Developing
 
@@ -28,7 +28,7 @@ in Firefox:
 ### on Marketplace
 
 * run `./pack.ps1`
-* go to: <https://addons.mozilla.org/de/developers/addons>
+* go to: <https://addons.mozilla.org/en-US/developers/addons>
 * Add new Addon / New Version
 * select the zip
 
