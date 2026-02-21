@@ -323,16 +323,18 @@ let init = async () => {
   new NormalPlayerObserver(onNewPlayer)
   new ShortsPlayerObserver(onNewPlayer)
 
+  const hasSpeedControl = () => document.querySelector('.pbspeed-container') !== null
+
   // backup 1
   await delay(5000);
-  new NormalPlayerObserver(onNewPlayer)
+  if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer)
   
   // backup 2
   await delay(10000);
-  new NormalPlayerObserver(onNewPlayer)  
+  if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer)  
   
   // backup 3 (bro wtf, what machine do you have 🤯)
   await delay(30000);
-  new NormalPlayerObserver(onNewPlayer)
+  if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer)
 }
 init()

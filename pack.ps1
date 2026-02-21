@@ -5,7 +5,7 @@ if (Test-Path youtube-playback-speed-control.zip) {
 
 try {
     # Create new zip archive
-    Compress-Archive -Path manifest.json, content.js, pages, img, popup -DestinationPath youtube-speed-slider.zip -Force
+    Compress-Archive -Path manifest.json, content.js, img, popup -DestinationPath youtube-speed-slider.zip -Force
     Write-Host "Archive created successfully" -ForegroundColor Green
 }
 catch {
