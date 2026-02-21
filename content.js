@@ -152,7 +152,7 @@ class Instance {
     
     if (values['save-speed'] === 'always') {
       // Gespeicherte Geschwindigkeit anwenden, falls vorhanden
-      this._video.playbackRate = values['last-speed'] //! problem ist heir
+      this._video.playbackRate = values['last-speed'] 
     } else {
       // Auf Standard zurücksetzen
       this._video.playbackRate = 1.0
@@ -175,19 +175,19 @@ class Instance {
   _create() {
     let container = document.createElement('div')
     container.className = 'pbspeed-container'
-    container.style = 'margin:0 14px; display:flex; align-items: center; gap:12px;'
+    container.style = 'margin: 8px; display:flex; padding: 0 8px; align-items: center; gap:12px; border-radius:28px; background:rgba(0, 0, 0, 0.3);'
 
     let displayHTML = `<div class="rdisplay" style="grid-row: 1; grid-column: 1; font-size:120%; user-select: none;">⏱ <span class="pbspeed-value"></span></div>`
     if (!document.querySelector('#pbspeed-slider-style')) {
         const style = document.createElement('style');
-        style.id = 'pbspeed-slider-style';
+        style.id = 'pbspeed-style';
         style.textContent = `
             .pbspeed-slider::-webkit-slider-thumb {
                 -webkit-appearance: none;
                 width: 18px;
                 height: 18px;
                 border-radius: 50%;
-                background: #6f6f6fff;
+                background: rgba(111, 111, 111, 1);
                 cursor: pointer;
                 border: none;
                 box-shadow: 0 0 2px rgba(0,0,0,0.5);
@@ -196,19 +196,33 @@ class Instance {
                 width: 15px;
                 height: 15px;
                 border-radius: 50%;
-                background: rgba(241, 241, 241, 0.8);
+                background: rgba(255, 255, 255, 1);
                 cursor: pointer;
                 border: 2px solid white;
                 box-shadow: 0 0 2px rgba(0,0,0,0.5);
                 border: none;
             }
+            .rdisplay {
+                margin: 8px 0 !important;
+                padding: 0 8px !important;
+                border-radius: 28px !important;
+                background:rgba(0, 0, 0, 0) !important;
+                transition: background 0.2s !important;
+                display: flex !important;
+                align-items: center !important;
+                height: 32px !important;
+            }
+            .rdisplay:hover {
+                background: rgba(255, 255, 255, 0.1) !important;
+            } 
+            .pbspeed-value {
+                padding-left: 4px !important;
+            }
         `;
         document.head.appendChild(style);
     }
-    let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.05" style="grid-row: 1; grid-column: 3; width:7em; height:0.5em; -webkit-appearance:none; outline:none; opacity:0.70; background: rgba(70, 70, 70, 1); border-radius: 4px; cursor: pointer;"/>`
-    // Control layout:
-    // | Display | 0.25 0.50 0.75 1.00
-    // | Current | 1.25 1.50 1.75 2.00
+    let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.05" style="grid-row: 1; grid-column: 3; width:7em; height:0.5em; -webkit-appearance:none; outline:none; opacity:0.70; background: rgba(170, 170, 170, 1); border-radius: 4px; cursor: pointer;"/>`
+
     let presetsHTML = `<div class="setrs" style="grid-row: 1; grid-column: 3; display: none; grid-template: 1fr 1fr / repeat(4, auto); column-gap: 6px;"><div>0.25</div><div>0.50</div><div>0.75</div><div>1.00</div><div>1.25</div><div>1.50</div><div>1.75</div><div>2.00</div></div>`
     container.innerHTML = `${displayHTML}${sliderHTML}${presetsHTML}`
 
@@ -328,12 +342,21 @@ let init = async () => {
   // backup 1
   await delay(5000);
   if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer)
-  
+
+    
   // backup 2
   await delay(10000);
+  if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer)    
+    
+    // backup 2.5
+  await delay(15000);
+  if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer)
+
+    // backup 3
+  await delay(20000);
   if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer)  
   
-  // backup 3 (bro wtf, what machine do you have 🤯)
+  // backup 4 (bro wtf, what machine do you have 🤯)
   await delay(30000);
   if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer)
 }
