@@ -34,5 +34,4 @@ in Firefox:
 ## TODO
 
 * optimize for shorts
-* add extention options for changing the max speed
 * make the slider only apper when hovering
