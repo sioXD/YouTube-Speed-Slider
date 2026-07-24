@@ -177,7 +177,8 @@ class Instance {
     container.className = 'pbspeed-container'
     container.style = 'margin: 8px; display:flex; padding: 0 8px; align-items: center; gap:12px; border-radius:28px; background:rgba(0, 0, 0, 0.3);'
 
-    let displayHTML = `<div class="rdisplay" style="grid-row: 1; grid-column: 1; font-size:120%; user-select: none;">⏱ <span class="pbspeed-value"></span></div>`
+    const speedIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="display:inline;vertical-align:middle;margin-right:2px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 5v7l4 2.5"/></svg>`
+    let displayHTML = `<div class="rdisplay" style="grid-row: 1; grid-column: 1; font-size:120%; user-select: none;">${speedIcon} <span class="pbspeed-value"></span></div>`
     if (!document.querySelector('#pbspeed-slider-style')) {
         const style = document.createElement('style');
         style.id = 'pbspeed-style';
