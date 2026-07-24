@@ -4,19 +4,19 @@
   "description": "Add playback speed Slider and controls to the YouTube video player controls.",
   "version": "1.9",
   "action": {
-    "default_popup": "popup/popup.html",
+    "default_popup": "src/popup/popup.html",
     "default_title": "YouTube Speed Slider",
     "default_icon": {
-      "48": "img/icon.png"
+      "48": "src/icons/icon.png"
     }
   },
   "icons": {
-    "48": "img/icon.png"
+    "48": "src/icons/icon.png"
   },
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
-      "js": ["content.js"],
+      "js": ["src/content.js"],
       "all_frames": true
     }
   ],
