@@ -6,9 +6,9 @@ Add playback speed indicator and controls to the YouTube video player bottom lef
 
 [![add to Firefox](https://img.shields.io/amo/v/youtube-speed-slider-controls?label=add%20to%20Firefox&style=for-the-badge&logo=firefox)](https://addons.mozilla.org/de/firefox/addon/youtube-speed-slider-controls/)
 
-![screenshot of the playback speed display and controls in the YouTube player](img/screenshot1.png)
+![screenshot of the playback speed display and controls in the YouTube player](docs/img/screenshot1.png)
 
-![screenshot of the popup menu](img/screenshot2.png)
+![screenshot of the popup menu](docs/img/screenshot2.png)
 
 ## Developing
 
