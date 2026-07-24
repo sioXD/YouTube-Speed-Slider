@@ -16,7 +16,7 @@ try {
     # Update popup.html with version and date
     $popupPath = "src/popup/popup.html"
     $popupContent = Get-Content $popupPath -Raw
-    $popupContent = $popupContent -replace '(<span id="version"[^>]*>).*?(</span>)', "`$1v$version - $currentDate`$2"
+    $popupContent = $popupContent -replace '(<div id="version"[^>]*>)[\s\S]*?(</div>)', "`$1v$version - upgraded on $currentDate`$2"
     Set-Content -Path $popupPath -Value $popupContent -NoNewline
 
     # Build the extension with web-ext so Firefox-compatible packaging is handled automatically
