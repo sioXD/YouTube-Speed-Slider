@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="YouTube Speed Slider - Add playback speed slider and controls to the YouTube video player. Customizable speed range, wheel control, and persistent settings."
+		/>
+		<meta name="keywords" content="youtube, speed, slider, playback, controls, firefox, extension, addon" />
+		<title>YouTube Speed Slider - Custom Playback Controls</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			:root {
+				--bg-primary: #0a0a0f;
+				--bg-secondary: #12121a;
+				--bg-tertiary: #1a1a25;
+				--accent-primary: #ff3366;
+				--accent-secondary: #7c3aed;
+				--accent-glow: rgba(255, 51, 102, 0.4);
+				--text-primary: #f0f0f5;
+				--text-secondary: #8888a0;
+				--text-muted: #5c5c70;
+				--border-color: rgba(255, 255, 255, 0.06);
+			}
+
+			body {
+				font-family:
+					"Space Grotesk",
+					-apple-system,
+					BlinkMacSystemFont,
+					sans-serif;
+				background: var(--bg-primary);
+				color: var(--text-primary);
+				line-height: 1.6;
+				overflow-x: hidden;
+			}
+
+			body::before {
+				content: "";
+				position: fixed;
+				top: -50%;
+				right: -50%;
+				width: 100%;
+				height: 100%;
+				background: radial-gradient(circle, rgba(255, 51, 102, 0.08) 0%, transparent 60%);
+				pointer-events: none;
+				z-index: 0;
+			}
+
+			.container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 0 20px;
+				position: relative;
+				z-index: 1;
+			}
+
+			header {
+				padding: 60px 0 40px;
+				text-align: center;
+			}
+
+			h1 {
+				font-size: 3.5rem;
+				font-weight: 700;
+				margin-bottom: 20px;
+				background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			.tagline {
+				font-size: 1.3rem;
+				color: var(--text-secondary);
+				margin-bottom: 40px;
+			}
+
+			.buttons {
+				display: flex;
+				gap: 20px;
+				justify-content: center;
+				flex-wrap: wrap;
+				margin-bottom: 60px;
+			}
+
+			.btn {
+				padding: 16px 32px;
+				font-size: 1.1rem;
+				font-weight: 600;
+				border: none;
+				border-radius: 12px;
+				cursor: pointer;
+				text-decoration: none;
+				display: inline-flex;
+				align-items: center;
+				gap: 10px;
+				transition: all 0.3s ease;
+			}
+
+			.btn-primary {
+				background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+				color: white;
+				box-shadow: 0 8px 24px var(--accent-glow);
+			}
+
+			.btn-primary:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 12px 32px var(--accent-glow);
+			}
+
+			.btn-secondary {
+				background: var(--bg-secondary);
+				color: var(--text-primary);
+				border: 2px solid var(--border-color);
+			}
+
+			.btn-secondary:hover {
+				border-color: var(--accent-primary);
+				transform: translateY(-2px);
+			}
+
+			section {
+				padding: 60px 0;
+			}
+
+			h2 {
+				font-size: 2.5rem;
+				font-weight: 700;
+				margin-bottom: 40px;
+				text-align: center;
+			}
+
+			.features {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 30px;
+				margin-bottom: 60px;
+			}
+
+			.feature-card {
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-radius: 16px;
+				padding: 30px;
+				transition: all 0.3s ease;
+			}
+
+			.feature-card:hover {
+				transform: translateY(-4px);
+				border-color: var(--accent-primary);
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+			}
+
+			.feature-icon {
+				font-size: 2.5rem;
+				margin-bottom: 20px;
+			}
+
+			.feature-card h3 {
+				font-size: 1.4rem;
+				margin-bottom: 12px;
+				color: var(--accent-primary);
+			}
+
+			.feature-card p {
+				color: var(--text-secondary);
+				line-height: 1.6;
+			}
+
+			.stats {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 30px;
+				margin: 60px 0;
+			}
+
+			.stat-card {
+				text-align: center;
+				padding: 30px;
+				background: var(--bg-secondary);
+				border-radius: 16px;
+				border: 1px solid var(--border-color);
+			}
+
+			.stat-number {
+				font-size: 3rem;
+				font-weight: 700;
+				background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				margin-bottom: 10px;
+			}
+
+			.stat-label {
+				color: var(--text-secondary);
+				font-size: 1.1rem;
+			}
+
+			footer {
+				padding: 40px 0;
+				text-align: center;
+				border-top: 1px solid var(--border-color);
+				color: var(--text-muted);
+				margin-top: 60px;
+			}
+
+			.footer-links {
+				display: flex;
+				gap: 30px;
+				justify-content: center;
+				margin-bottom: 20px;
+				flex-wrap: wrap;
+			}
+
+			.footer-links a {
+				color: var(--text-secondary);
+				text-decoration: none;
+				transition: color 0.3s ease;
+			}
+
+			.footer-links a:hover {
+				color: var(--accent-primary);
+			}
+
+			@media (max-width: 768px) {
+				h1 {
+					font-size: 2.5rem;
+				}
+
+				.tagline {
+					font-size: 1.1rem;
+				}
+
+				.buttons {
+					flex-direction: column;
+					align-items: stretch;
+				}
+
+				.btn {
+					width: 100%;
+					justify-content: center;
+				}
+
+				.features {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			code {
+				background: var(--bg-tertiary);
+				padding: 2px 8px;
+				border-radius: 4px;
+				font-family: "JetBrains Mono", monospace;
+				color: var(--accent-primary);
+			}
+
+			.screenshot {
+				max-width: 100%;
+				border-radius: 16px;
+				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+				margin: 40px 0;
+			}
+
+			.screenshots {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 30px;
+				margin: 40px 0;
+			}
+
+			@media (max-width: 768px) {
+				.screenshots {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1>YouTube Speed Slider</h1>
+				<p class="tagline">Add playback speed slider and controls to the YouTube video player</p>
+
+				<div class="buttons">
+					<a
+						href="https://addons.mozilla.org/de/firefox/addon/youtube-speed-slider-controls/"
+						class="btn btn-primary"
+					>
+						<span>🦊</span> Install for Firefox
+					</a>
+					<a href="https://github.com/sioXD/YouTube-Speed-Slider" class="btn btn-secondary">
+						<span>📦</span> View on GitHub
+					</a>
+				</div>
+			</header>
+
+			<section>
+				<h2>Features</h2>
+				<div class="features">
+					<div class="feature-card">
+						<div class="feature-icon">🎚️</div>
+						<h3>Speed Slider</h3>
+						<p>
+							A smooth, draggable slider integrated directly into YouTube's player controls. Adjust
+							playback speed from 0x to 5x with precision.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">👁️</div>
+						<h3>Speed Display</h3>
+						<p>
+							See the current playback speed at a glance with a clean display next to a clock icon in the
+							YouTube player's bottom controls.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">🖱️</div>
+						<h3>Mouse Wheel Control</h3>
+						<p>
+							Hover over the speed control and scroll to increase or decrease speed. Configurable step
+							size via settings.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">↩️</div>
+						<h3>Click to Reset</h3>
+						<p>
+							Quickly reset playback speed to 1.0x by clicking the speed display. No need to drag the
+							slider back.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">💾</div>
+						<h3>Speed Persistence</h3>
+						<p>
+							Your preferred speed is remembered across videos. Enable or disable persistence in the
+							settings popup.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">⚙️</div>
+						<h3>Configurable Settings</h3>
+						<p>
+							Customize min/max speed range, wheel step increment, and save behavior via the extension
+							popup. Changes apply instantly.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">🔢</div>
+						<h3>Preset Speeds</h3>
+						<p>
+							Toggleable preset buttons (0.25x to 2.00x) for quick switching between common speeds. Enable
+							them in the settings.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">📱</div>
+						<h3>Shorts Support</h3>
+						<p>
+							Works with YouTube Shorts too. The speed control adapts to the Shorts player layout
+							automatically.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">🔒</div>
+						<h3>Privacy First</h3>
+						<p>All settings stored locally. No tracking, no analytics, no data sent to external servers.</p>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2>Screenshots</h2>
+				<div class="screenshots">
+					<img
+						src="../img/screenshot1.png"
+						alt="Speed display and slider in YouTube player controls"
+						class="screenshot"
+					/>
+					<img src="../img/screenshot2.png" alt="Extension popup settings panel" class="screenshot" />
+				</div>
+			</section>
+
+			<section>
+				<h2>How It Works</h2>
+				<div class="feature-card">
+					<ol style="color: var(--text-secondary); padding-left: 20px; line-height: 2">
+						<li>Install the extension and navigate to any YouTube video</li>
+						<li>A speed display appears in the bottom-left player controls</li>
+						<li>Hover over the display to reveal the slider</li>
+						<li>Drag the slider or use the mouse wheel to adjust speed</li>
+						<li>Click the speed display to instantly reset to 1.0x</li>
+						<li>Open the popup to customize min/max speed, wheel step, and more</li>
+					</ol>
+				</div>
+			</section>
+
+			<section>
+				<h2>Statistics</h2>
+				<div class="stats">
+					<div class="stat-card">
+						<div class="stat-number">v2.0.0</div>
+						<div class="stat-label">Latest Version</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-number">9+</div>
+						<div class="stat-label">Features</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-number">0–5x</div>
+						<div class="stat-label">Speed Range</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-number">GPL-3.0</div>
+						<div class="stat-label">Open Source</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2>Installation</h2>
+				<div class="feature-card">
+					<h3 style="color: var(--accent-primary); margin-bottom: 20px">Firefox</h3>
+					<p style="margin-bottom: 20px">Download the latest build from GitHub Releases:</p>
+					<a
+						href="https://github.com/sioXD/YouTube-Speed-Slider/releases"
+						class="btn btn-primary"
+						style="margin-bottom: 30px"
+					>
+						<span>📦</span> Download Latest
+					</a>
+
+					<h3 style="color: var(--accent-primary); margin: 30px 0 20px">Manual Installation</h3>
+					<ol style="color: var(--text-secondary); padding-left: 20px; line-height: 2">
+						<li>
+							Clone the repository:
+							<code>git clone https://github.com/sioXD/YouTube-Speed-Slider.git</code>
+						</li>
+						<li>Open Firefox and navigate to <code>about:debugging#/runtime/this-firefox</code></li>
+						<li>Click "Load Temporary Add-on"</li>
+						<li>Select <code>manifest.json</code> from the cloned repository</li>
+					</ol>
+				</div>
+			</section>
+
+			<section>
+				<h2>Open Source</h2>
+				<div class="feature-card" style="text-align: center">
+					<p style="margin-bottom: 20px">
+						YouTube Speed Slider is open source under the GPL-3.0 License. Based on the original
+						<a href="https://github.com/Kissaki/youtube-speed-controls" style="color: var(--accent-primary)"
+							>youtube-speed-controls</a
+						>
+						by Jan Klass. Contributions are welcome!
+					</p>
+					<div class="buttons" style="margin-bottom: 0">
+						<a href="https://github.com/sioXD/YouTube-Speed-Slider" class="btn btn-secondary">
+							<span>📦</span> GitHub Repository
+						</a>
+						<a href="https://github.com/sioXD/YouTube-Speed-Slider/issues" class="btn btn-secondary">
+							<span>🐛</span> Report Issues
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<footer>
+				<div class="footer-links">
+					<a href="https://github.com/sioXD/YouTube-Speed-Slider">GitHub</a>
+					<a href="https://github.com/sioXD/YouTube-Speed-Slider/blob/main/LICENSE">License</a>
+				</div>
+				<p>Made with ❤️ for YouTube viewers</p>
+			</footer>
+		</div>
+	</body>
+</html>
