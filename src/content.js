@@ -7,19 +7,12 @@ class NormalPlayerObserver {
 	 * @param {(video: HTMLVideoElement, vcLeft: Element)} newPlayerCallback
 	 */
 	constructor(newPlayerCallback) {
-		/**
-		 * @type {(video: HTMLVideoElement, vcLeft: Element)}
-		 */
 		this._newPlayerCallback = newPlayerCallback;
-
 		this._find();
 	}
 	_find() {
 		if (this._tryIdentify()) return;
-
 		document.addEventListener("yt-navigate-finish", this._onNavFinish.bind(this));
-
-		// this._observeMutations()
 	}
 	_tryIdentify() {
 		let video = document.querySelector("video");
@@ -37,27 +30,6 @@ class NormalPlayerObserver {
 			this._navTimeout = null;
 			this._tryIdentify();
 		}, 500);
-	}
-	_observeMutations() {
-		this._observer = new MutationObserver(this._onMutation.bind(this));
-		this._observer.observe(document, { childList: true, subtree: true });
-	}
-	_onMutation(mutationList, observer) {
-		for (let mutation of mutationList) {
-			for (let addedNode of mutation.addedNodes) {
-				if (
-					addedNode.nodeName !== "VIDEO" ||
-					addedNode.nodeName !== "DIV" ||
-					addedNode.className !== "ytp-left-controls"
-				)
-					continue;
-
-				if (this._tryIdentify()) {
-					observer.disconnect();
-					this._observer = null;
-				}
-			}
-		}
 	}
 }
 
@@ -148,27 +120,23 @@ class Instance {
 		this._removeExisting();
 		this._create();
 		this._bind();
-		this._loadSavedSpeed(); // Geladene Geschwindigkeit anwenden
+		this._loadSavedSpeed();
 		this._updateRateDisplay();
 		this._updateControlVisibility();
 		this._insert();
 	}
 
-	// Neue Methode zum Laden der gespeicherten Geschwindigkeit
 	async _loadSavedSpeed() {
 		const values = await chrome.storage.local.get({ "save-speed": "always", "last-speed": 1.0 });
 		console.debug("LOADED: ", values);
 
 		if (values["save-speed"] === "always") {
-			// Gespeicherte Geschwindigkeit anwenden, falls vorhanden
 			this._video.playbackRate = values["last-speed"];
 		} else {
-			// Auf Standard zurücksetzen
 			this._video.playbackRate = 1.0;
 		}
 	}
 
-	// Neue Methode zum Speichern der Geschwindigkeit
 	async _saveCurrentSpeed() {
 		const values = await chrome.storage.local.get({ "save-speed": "always" });
 
@@ -188,7 +156,7 @@ class Instance {
 			"margin: 8px; display:flex; padding: 0 8px; align-items: center; border-radius:28px; background:rgba(0, 0, 0, 0.3);";
 
 		const speedIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="display:inline;vertical-align:middle;margin-right:2px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 5v7l4 2.5"/></svg>`;
-		let displayHTML = `<div class="rdisplay" style="grid-row: 1; grid-column: 1; font-size:120%; user-select: none;">${speedIcon} <span class="pbspeed-value"></span></div>`;
+		let displayHTML = `<div class="rdisplay" style="font-size:120%; user-select: none;">${speedIcon} <span class="pbspeed-value"></span></div>`;
 		if (!document.querySelector("#pbspeed-slider-style")) {
 			const style = document.createElement("style");
 			style.id = "pbspeed-style";
@@ -257,9 +225,9 @@ class Instance {
         `;
 			document.head.appendChild(style);
 		}
-			let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.05" style="grid-row: 1; grid-column: 3; height:0.5em; -webkit-appearance:none; outline:none; border-radius: 4px; cursor: pointer;"/>`;
+		let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.05" style="height:0.5em; -webkit-appearance:none; outline:none; border-radius: 4px; cursor: pointer;"/>`;
 
-		let presetsHTML = `<div class="setrs" style="grid-row: 1; grid-column: 3; display: none; grid-template: 1fr 1fr / repeat(4, auto); column-gap: 6px;"><div>0.25</div><div>0.50</div><div>0.75</div><div>1.00</div><div>1.25</div><div>1.50</div><div>1.75</div><div>2.00</div></div>`;
+		let presetsHTML = `<div class="setrs" style="display: none; grid-template: 1fr 1fr / repeat(4, auto); column-gap: 6px;"><div>0.25</div><div>0.50</div><div>0.75</div><div>1.00</div><div>1.25</div><div>1.50</div><div>1.75</div><div>2.00</div></div>`;
 		container.innerHTML = `${displayHTML}${sliderHTML}${presetsHTML}`;
 
 		this._container = container;
@@ -268,8 +236,6 @@ class Instance {
 		this._slider = container.querySelector(".pbspeed-slider");
 		this._presets = container.querySelector(".setrs");
 
-		// Styling children en-mass
-		// container height 48px => element height 48 / 2 = 24 px
 		for (let x of this._presets.childNodes)
 			x.style = "font-size: 14px; line-height: 24px; display: flex; align-items: center; cursor: pointer;";
 	}
@@ -348,27 +314,22 @@ class Instance {
 	_onSliderWheel(e) {
 		e.preventDefault();
 
-		// Gespeicherte Schrittweite abrufen
 		chrome.storage.local.get({ "wheel-step": 0.05 }).then((values) => {
 			const step = values["wheel-step"];
 			const delta = e.deltaY > 0 ? -step : step;
 
-			// Calculate new rate
 			let newRate = parseFloat(this._slider.value) + delta;
-
-			// Clamp to min/max values
 			newRate = Math.max(parseFloat(this._slider.min), Math.min(parseFloat(this._slider.max), newRate));
 
-			// Update video and slider
 			this._video.playbackRate = newRate;
 			this._slider.value = newRate;
 			this._updateRateDisplay();
-			this._saveCurrentSpeed(); // Speichern bei Wheel-Input
+			this._saveCurrentSpeed();
 		});
 	}
 	_onRdisplayClick(e) {
 		this._video.playbackRate = 1.0;
-		this._saveCurrentSpeed(); // Speichern bei Reset-Klick
+		this._saveCurrentSpeed();
 	}
 	async _updateControlVisibility() {
 		let values = await chrome.storage.local.get({ "show-slider": true, "show-presets": false });
@@ -387,13 +348,13 @@ class Instance {
 	}
 }
 
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-
-let init = async () => {
+let init = () => {
 	/**
 	 * @type {(videoElement: HTMLVideoElement, controlsContainer: Element)}
 	 */
 	let currentInstance = null;
+	/** @type {HTMLVideoElement|null} */
+	let lastVideo = null;
 
 	let onNewPlayer = (video, controlsContainer) => {
 		console.debug(
@@ -401,32 +362,21 @@ let init = async () => {
 			video,
 			controlsContainer
 		);
+		if (video === lastVideo) return;
+		lastVideo = video;
 		if (currentInstance) currentInstance.destroy();
 		currentInstance = new Instance(video, controlsContainer);
 	};
 	new NormalPlayerObserver(onNewPlayer);
 	new ShortsPlayerObserver(onNewPlayer);
 
-	const hasSpeedControl = () => document.querySelector(".pbspeed-container") !== null;
-
-	// backup 1
-	await delay(5000);
-	if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer);
-
-	// backup 2
-	await delay(10000);
-	if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer);
-
-	// backup 2.5
-	await delay(15000);
-	if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer);
-
-	// backup 3
-	await delay(20000);
-	if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer);
-
-	// backup 4 (bro wtf, what machine do you have 🤯)
-	await delay(30000);
-	if (!hasSpeedControl()) new NormalPlayerObserver(onNewPlayer);
+	const rebuildObserver = new MutationObserver(() => {
+		const video = document.querySelector("video");
+		const vcLeft = document.querySelector(".ytp-left-controls");
+		if (video && vcLeft) {
+			onNewPlayer(video, vcLeft);
+		}
+	});
+	rebuildObserver.observe(document.body, { childList: true, subtree: true });
 };
 init();

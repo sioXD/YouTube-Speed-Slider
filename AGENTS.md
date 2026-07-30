@@ -10,8 +10,8 @@ npx prettier --write .
 
 # Package for distribution (requires web-ext globally)
 npm install --global web-ext
-./pack.ps1              # Windows / PowerShell
-web-ext build --ignore-files docs META-INF CHANGELOG.md CONTRIBUTING.md LICENSE original_README.md pack.ps1 README.md SECURITY.md   # Linux
+./pack.ps1              # Windows / pwsh (cross-platform)
+./pack.sh               # Linux / bash
 ```
 
 ## Key paths

@@ -22,18 +22,29 @@ in Firefox:
 
 ### local
 
-- run `./pack.ps1`
+- run `./pack.ps1` or `./pack.sh` (Windows / Linux)
 - go to `about:debugging#/runtime/this-firefox`
 - select the zip
 
 ### on Marketplace
 
-- run `./pack.ps1`
+#### Manuel
+
+- run `./pack.ps1` or `./pack.sh` (Windows / Linux)
 - go to: <https://addons.mozilla.org/en-US/developers/addons>
 - Add new Addon / New Version
 - select the zip
 
+#### CI/CD
+
+```properties
+git commit -m "..."
+git tag v2.0.0
+git push origin main --tags
+```
+
+- configue the GitHub Action in Settings with your AMO API Key and Secret
+
 ## TODO
 
 - optimize for shorts
-- make the slider only apper when hovering
