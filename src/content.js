@@ -152,19 +152,32 @@ class Instance {
 	_create() {
 		let container = document.createElement("div");
 		container.className = "pbspeed-container";
-		container.style =
-			"margin: 8px; display:flex; padding: 0 8px; align-items: center; border-radius:28px; background:rgba(0, 0, 0, 0.3);";
+		container.style = `
+			margin: 8px;
+			display: flex;
+			padding: 0 4px;
+			align-items: center;
+			border-radius: 28px;
+			background: rgba(0, 0, 0, 0.3);
+		`;
 
-		const speedIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="display:inline;vertical-align:middle;margin-right:2px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 5v7l4 2.5"/></svg>`;
-		let displayHTML = `<div class="rdisplay" style="font-size:120%; user-select: none;">${speedIcon} <span class="pbspeed-value"></span></div>`;
+		const speedIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="
+			display: inline;
+			vertical-align: middle;
+			margin-right: 2px;
+		" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 5v7l4 2.5"/></svg>`;
+		let displayHTML = `<div class="rdisplay" style="
+			font-size: 120%;
+			user-select: none;
+		">${speedIcon} <span class="pbspeed-value"></span></div>`;
 		if (!document.querySelector("#pbspeed-slider-style")) {
 			const style = document.createElement("style");
-			style.id = "pbspeed-style";
+			style.id = "pbspeed-slider-style";
 			style.textContent = `
             .pbspeed-slider::-webkit-slider-thumb {
                 -webkit-appearance: none;
-                width: 18px;
-                height: 18px;
+                width: 16px;
+                height: 16px;
                 border-radius: 50%;
                 background: rgba(255, 255, 255, 1);
                 cursor: pointer;
@@ -172,8 +185,8 @@ class Instance {
                 box-shadow: 0 0 2px rgba(0,0,0,0.5);
             }
             .pbspeed-slider::-moz-range-thumb {
-                width: 15px;
-                height: 15px;
+                width: 12px;
+                height: 12px;
                 border-radius: 50%;
                 background: rgba(255, 255, 255, 1);
                 cursor: pointer;
@@ -181,17 +194,17 @@ class Instance {
                 box-shadow: 0 0 2px rgba(0,0,0,0.5);
             }
             .pbspeed-slider::-webkit-slider-runnable-track {
-                height: 0.5em;
+                height: 0.3em;
                 border-radius: 4px;
                 background: linear-gradient(to right, #fff var(--fill, 0%), #555 var(--fill, 0%));
             }
             .pbspeed-slider::-moz-range-track {
-                height: 0.5em;
+                height: 0.3em;
                 border-radius: 4px;
                 background: #555;
             }
             .pbspeed-slider::-moz-range-progress {
-                height: 0.5em;
+                height: 0.3em;
                 border-radius: 4px;
                 background: #fff;
             }
@@ -212,12 +225,18 @@ class Instance {
                 width: 0 !important;
                 min-width: 0 !important;
                 opacity: 0;
+                margin: 0 !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                background: transparent !important;
+                border: none !important;
                 transition: width 0.3s ease, opacity 0.3s ease, margin 0.3s ease !important;
             }
             .pbspeed-container.slider-visible .pbspeed-slider {
-                width: 7em !important;
-                opacity: 0.7;
-                margin-left: 12px !important;
+                width: 5em !important;
+                opacity: 1;
+                margin: 12px !important;
             }
             .pbspeed-value {
                 padding-left: 4px !important;
@@ -225,25 +244,23 @@ class Instance {
         `;
 			document.head.appendChild(style);
 		}
-		let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.05" style="height:0.5em; -webkit-appearance:none; outline:none; border-radius: 4px; cursor: pointer;"/>`;
-
-		let presetsHTML = `<div class="setrs" style="display: none; grid-template: 1fr 1fr / repeat(4, auto); column-gap: 6px;"><div>0.25</div><div>0.50</div><div>0.75</div><div>1.00</div><div>1.25</div><div>1.50</div><div>1.75</div><div>2.00</div></div>`;
-		container.innerHTML = `${displayHTML}${sliderHTML}${presetsHTML}`;
+		let sliderHTML = `<input id="slider" class="pbspeed-slider" type="range" min="0" max="5" step="0.1" style="
+			height: 0.5em;
+			-webkit-appearance: none;
+			outline: none;
+			border-radius: 4px;
+			cursor: pointer;
+		"/>`;
+		container.innerHTML = `${displayHTML}${sliderHTML}`;
 
 		this._container = container;
 		this._display = container.querySelector(".rdisplay");
 		this._rateDisplay = this._display.querySelector(".pbspeed-value");
 		this._slider = container.querySelector(".pbspeed-slider");
-		this._presets = container.querySelector(".setrs");
-
-		for (let x of this._presets.childNodes)
-			x.style = "font-size: 14px; line-height: 24px; display: flex; align-items: center; cursor: pointer;";
 	}
 	_bind() {
 		this._boundRateChange = this._updateRateDisplay.bind(this);
 		this._video.addEventListener("ratechange", this._boundRateChange);
-
-		for (let x of this._presets.childNodes) x.addEventListener("click", this._onPresetClick.bind(this));
 
 		this._slider.addEventListener("input", this._onSliderInput.bind(this));
 
@@ -282,7 +299,7 @@ class Instance {
 		let values = await chrome.storage.local.get({
 			"min-speed": 0,
 			"max-speed": 5.0,
-			"wheel-step": 0.05,
+			"wheel-step": 0.1,
 		});
 
 		this._slider.min = values["min-speed"];
@@ -295,10 +312,6 @@ class Instance {
 		this._rateDisplay.innerText = `${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}x`;
 		this._slider.value = value;
 		this._updateSliderFill();
-	}
-	_onPresetClick(e) {
-		this._video.playbackRate = parseFloat(e.target.innerText);
-		this._saveCurrentSpeed();
 	}
 	_onSliderInput(e) {
 		this._video.playbackRate = parseFloat(e.target.value);
@@ -314,7 +327,7 @@ class Instance {
 	_onSliderWheel(e) {
 		e.preventDefault();
 
-		chrome.storage.local.get({ "wheel-step": 0.05 }).then((values) => {
+		chrome.storage.local.get({ "wheel-step": 0.1 }).then((values) => {
 			const step = values["wheel-step"];
 			const delta = e.deltaY > 0 ? -step : step;
 
@@ -332,8 +345,7 @@ class Instance {
 		this._saveCurrentSpeed();
 	}
 	async _updateControlVisibility() {
-		let values = await chrome.storage.local.get({ "show-slider": true, "show-presets": false });
-		this._presets.style.display = values["show-presets"] ? "grid" : "none";
+		let values = await chrome.storage.local.get({ "show-slider": true });
 		this._slider.style.display = values["show-slider"] ? "block" : "none";
 	}
 	_insert() {
