@@ -154,6 +154,7 @@ class Instance {
 		container.className = "pbspeed-container";
 		container.style = `
 			margin: 8px;
+			margin-left: 0;
 			display: flex;
 			padding: 0 4px;
 			align-items: center;
